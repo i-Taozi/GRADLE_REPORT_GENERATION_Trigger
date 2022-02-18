@@ -30,6 +30,13 @@ apply from: file('gradle/ide/idea.gradle')
 apply from: file('gradle/publishing/maven.gradle')
 
 allprojects {
+    tasks.withType(Test).configureEach {
+        if (!project.hasProperty("createReports")) {
+            reports.html.required = false
+            reports.junitXml.required = false
+        }
+    }
+
   repositories {
     mavenCentral()
   }
