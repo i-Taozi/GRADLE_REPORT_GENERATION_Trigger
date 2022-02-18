@@ -1,82 +1,75 @@
-[![License](https://img.shields.io/badge/license-GPL%20License%20v3-blue.svg)](LICENSE.md)
-[![Build Status](https://github.com/PrisonTeam/Prison/workflows/Prison%20Build/badge.svg)](https://github.com/PrisonTeam/Prison/actions?query=workflow%3A%22Prison+Build%22)
-[![Build Status](https://travis-ci.org/MC-Prison/Prison.svg?branch=master)](https://travis-ci.org/MC-Prison/Prison)
-[![Discord](https://discordapp.com/api/guilds/332602419483770890/widget.png)](https://discord.gg/DCJ3j6r)
-
-1. [What is Prison?](#what-is-prison)
-2. [Why should I use Prison?](#why-should-i-use-prison)
-3. [Get Prison](#get-prison)
-
-## Prison Documentation
-
-[Prison Documents - Table of Contents](https://prisonteam.github.io/Prison/prison_docs_000_toc.html)
-
-The Prison documentation covers the important details on how to setup a usable Prison server.
-These documents are in a state of development, so more will be added.
-
-## What is Prison?
-
-Prison is a Minecraft plugin that adds all the features necessary for prison servers. It runs on the popular [Spigot](http://spigotmc.org). Plugins for prison servers exist already, but many of them are poorly maintained, and the solid ones are paid resources. Prison eliminates the paywall and the updating hassle, and puts a one-stop solution in their place.
-
-### History of Prison
-
-Prison began as a plugin with the goal of combining two main prison server features: resetting mines and purchasable ranks. In June 2014, Prison v2.0 was released with the goal of providing a single solution for prison servers. Prison v2.0 has had numerous problems and is not the solution that we had envisioned for an all-in-one package to be. The solution is the current version - Prison v3.0.
-
-Starting with prison v3.2.0 new development efforts were began with a focus on adding new features
-and improving the performance and stability.
-
-## Why should I use Prison?
-
-If hassle-free updates and zero payments is not enough for you to consider switching to Prison, it doesn't stop there.
-
-* **Prison is modular.** If you don't want to use a certain feature on your server, you can disable it in just a few keystrokes.
-* **Prison is completely, 100% open source.** This means that your developers can make changes to the plugin to customize your server's experience, if you so desire.
-* **Prison is and always will be free.** All of our code, resources, and binaries are provided free of charge to the Minecraft community. We do not accept donations.
-* **New releases are heavily bug-tested.** We test every single aspect of every new release of Prison before releasing it to the community. If a release doesn't pass our rigorous update checklist, it is iterated upon until it does. What does this mean for you? Solid updates with minimal bugs for your server.
-* **Prison is always expanding.** We are always looking for ways to expand Prison with features that make your server run more smoothly. Additionally, we are always looking for contributions from the community, be it code contributions, feature requests, bug reports, translations, or documentation.
+# Pokemap [![Download](https://img.shields.io/badge/download-latest-brightgreen.svg?style=flat-square)](https://github.com/omkarmoghe/Pokemap/releases)
 
 
-## Get Prison
+#[Our website is now live](http://pokemapgo.xyz/)
 
 
-| SpigotMC.org | Polymart.org | Bukkit.org | Experimental |
-| ------------ | ------------ | ---------- | ------------ |
-|    Stable    |    Stable    |   Stable   |    *Nightly*  |
-| [![Stable Download](https://img.shields.io/badge/download-stable-44cc11.svg)](https://www.spigotmc.org/resources/prison.1223/) | [![Stable Download](https://img.shields.io/badge/download-stable-44cc11.svg)](https://polymart.org/resource/prison-1-8-x-1-16-5.678/updates) | [![Stable Download](https://img.shields.io/badge/download-stable-44cc11.svg)](https://dev.bukkit.org/projects/mc-prison-v3) | [![Experimental Download](https://img.shields.io/badge/download-experimental-red.svg)](https://ci.appveyor.com/project/faizaand/prison/build/artifacts) | 
+
+ Join our Discord server ![Pokemap Discord](https://discordapp.com/api/guilds/258391846143787009/widget.png)
 
 
 
 
-## Gradle Configurations
+# IMPORTANT UPDATE (PLEASE READ) 8/7/16
 
-Prison is now able through the jitpack.io repository:
+First off, we want to thank the entire community for the crazy support and excitement you have shown about our project. We have some important news and updates concerning the state of this project.
 
-[![Release](https://jitpack.io/v/PrisonTeam/Prison.svg)](https://jitpack.io/#PrisonTeam/Prison)
+Unforunately, we have noticed an increasing number of apps using our codebase to create bots or charge users for the services we aim to provide for free. While we encourage the community to use our code and play with the app, such uses undermine the progress of our app by [motiviating Niantic to change their APIs](https://github.com/omkarmoghe/Pokemap/issues/383) and ultimately hinder further development of this project. For these reasons our dev team has made the following decisions regarding our source code:
 
+1. Further development of Pokemap will continue in a private repo. The source code here will be left as legacy.
+2. Signed APKs will be periodically uploaded to [releases](https://github.com/omkarmoghe/Pokemap/releases).
+3. The translations will be kept open source and we will accept pull requests for languages.
+4. No other pull requests will be merged to this repo.
+5. Issues will be tracked and used to add features and fix bugs with the APK releases.
 
-Within your `repositories` section, add jitpack.io as the last entry, as suggested by jitpack.io.
+If you are interested in contributing to the project, reach out to one of the contributors!
 
+Thanks for all your support!
 
-```
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
-```
+:heart:,  
+The Pokemap Dev Team
 
-Then add the dependency as follows, but replace `Tag` with a valid tag such as `3.2.7`.  See the link to jitpack.io's website for a list of Tags that you can use; select from the tabs Releases, Builds, Branches, and Commits.
+---
 
-```
-dependencies {
-	implementation 'com.github.PrisonTeam:Prison:Tag'
-}
-```
+[Can't log in? Check the PTC login status.](http://ispokemongodownornot.com/)
 
-Through jitpack.io's webpage you can select a Prison release and it will generate the correct dependency to use: [Prison repo on jitpack.io](https://jitpack.io/#PrisonTeam/Prison)
+A native Android client built with https://github.com/AHAAAAAAA/PokemonGo-Map
 
+screenshots from @linkout @mike @z14942744 @kyr0 @rancor
 
+### **Slack invites are now restricted to contributors only. Please comment your email when you submit a PR and we will send you an invite.**
 
-<hr style="height:3px; border:none; color:#aaf; background-color:#aaf;">
+# [RTFM](https://github.com/omkarmoghe/Pokemap/wiki)
+Please read the f***ing manual before opening an issue. :heart:
 
+[Contribute to the documentation!](https://github.com/omkarmoghe/Pokemap/issues/17)
+
+## [Building] (https://github.com/omkarmoghe/Pokemap/wiki/Building)
+Make sure you use the latest [android studio version 2.2 (canary builds)] (http://tools.android.com/download/studio/canary/latest) and have installed the latest versions of the build tools and support libraries in order to successfully compile and run the project. 
+
+# Contributing
+All PRs should go to the `dev` branch. `master` will be updated periodically with stable* releases.</str>
+
+Please read this to understand how this all works: https://www.reddit.com/r/pokemongodev/comments/4svl1o/guide_to_pokemon_go_server_responses/
+
+## Translations
+If you are contributing a PR related to language translations, please have other members of the community :thumbsup: your change.
+
+## Reporting Bugs
+Please include a screenshot and instructions on how to recreate the bug you are reporting. If you have any LogCat stack traces, etc. please include those as well. **Use the search bar to make sure you are not creating duplicate issues. If your bug has already been reported, feel free to comment with additional info.**
+
+# [Official Website] (http://pokemapgo.xyz/)
+From the main repo:
+> Live visualization of all pokemon (with option to show gyms and pokestops) in your area. This is a proof of concept that we can load all nearby pokemon given a location. Currently runs on a Flask server displaying a Google Map with markers on it.
+> 
+> Using this software is against the ToS and can get you banned. Use at your own risk.
+> 
+> Building off [Mila432](https://github.com/Mila432/Pokemon_Go_API)'s PokemonGo API, [tejado's additions](https://github.com/tejado/pokemongo-api-demo), [leegao's additions](https://github.com/leegao/pokemongo-api-demo/tree/simulation) and [Flask-GoogleMaps](https://github.com/rochacbruno/Flask-GoogleMaps).
+> 
+> For instructions, please refer to [the wiki](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki)  
+
+## iOS Version
+There is an [iOS port](https://github.com/istornz/iPokeGo) in the works. All iOS related prs and issues please refer to this [repo](https://github.com/istornz/iPokeGo).
+
+---
+:pineapple:
