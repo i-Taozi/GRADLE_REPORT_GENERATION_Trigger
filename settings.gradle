@@ -1,1 +1,3 @@
-include "java-app", "secure-session", "spring-cloud", "tcp-routes-mqtt" , "spring-cloud-autoconf-java", "spring-cloud-autoconf-jms", "spring-cloud-autoconf-jndi", "spring-cloud-java-cfenv"
+rootProject.name='http-builder-ng'
+
+include 'http-builder-ng-core', 'http-builder-ng-apache', 'http-builder-ng-okhttp'
