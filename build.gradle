@@ -145,3 +145,13 @@ def getCurrentTimestamp()
   SimpleDateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss")
   return df.format (new Date())
 }
+
+allprojects {
+    tasks.withType(Test).configureEach {
+        if (!project.hasProperty("createReports")) {
+            reports.html.required = false
+            reports.junitXml.required = false
+        }
+    }
+
+}
