@@ -1,175 +1,179 @@
-[![Build Status](https://travis-ci.org/SolaceSamples/solace-samples-cloudfoundry-java.svg?branch=master)](https://travis-ci.org/SolaceSamples/solace-samples-cloudfoundry-java)
+# HttpBuilder-NG: Easy HTTP Client for Groovy (and Java)
 
-# Getting Started Examples
-## Solace Cloud Foundry Java
+[![Bintray - Core](https://api.bintray.com/packages/http-builder-ng/dclark/httpbuilder-ng-core/images/download.svg)](https://bintray.com/http-builder-ng/dclark/httpbuilder-ng-core "Core Library")
+[![Bintray - Apache](https://api.bintray.com/packages/http-builder-ng/dclark/httpbuilder-ng-apache/images/download.svg)](https://bintray.com/http-builder-ng/dclark/httpbuilder-ng-apache "Apache Library")
+[![Bintray - OkHttp](https://api.bintray.com/packages/http-builder-ng/dclark/httpbuilder-ng-okhttp/images/download.svg)](https://bintray.com/http-builder-ng/dclark/httpbuilder-ng-okhttp "OkHttp Library")
 
-The repository contains example applications that use the Solace Pubsub+ service on Pivotal Cloud Foundry. The goal of these sample applications is to illustrate various ways of consuming the `VCAP_SERVICES` environment variable from a Solace Pubsub+ Cloud Foundry service instance. You can get more details on the Solace Pubsub+ Service for Pivotal Cloud Foundry [here](http://docs.pivotal.io/solace-messaging/).
+[![Maven Central - Core](https://maven-badges.herokuapp.com/maven-central/io.github.http-builder-ng/http-builder-ng-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.http-builder-ng/http-builder-ng-core) 
+[![Maven Central - Apache](https://maven-badges.herokuapp.com/maven-central/io.github.http-builder-ng/http-builder-ng-apache/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.http-builder-ng/http-builder-ng-apache) 
+[![Maven Central - OkHttp](https://maven-badges.herokuapp.com/maven-central/io.github.http-builder-ng/http-builder-ng-okhttp/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.http-builder-ng/http-builder-ng-okhttp) 
 
-This repository contains a sample application modified in the following ways:
+[![Travis Build Status](https://travis-ci.org/http-builder-ng/http-builder-ng.svg?branch=master)](https://travis-ci.org/http-builder-ng/http-builder-ng)
+[![Coverage Status](https://coveralls.io/repos/github/http-builder-ng/http-builder-ng/badge.svg?branch=master)](https://coveralls.io/github/http-builder-ng/http-builder-ng?branch=master)
 
-* Simple Java Application
-* Using Spring Cloud Connectors
-* Connecting using Transport Level Security
+[![Twitter Follow](https://img.shields.io/twitter/follow/httpbuilderng.svg?style=social&label=Follow)]()
 
-While not necessary for a Java Application or a straight Spring Cloud Connector applications, the samples in this repository still make use of of Spring Boot so they can easily expose a simple REST interface to provide interactive ways to subscribe, send and receive Solace messages. Spring Boot is not required. You can make use of the Spring Cloud Connectors in any Java Application. See the walk through tutorials for more details.
+> **Dormant** - The HttpBuilder-NG project is going dormant. Neither of us use the project any longer nor do we have the extra time to properly maintain it. Please feel free to fork it and move it forward, or contact us (with an issue) to discuss options for taking over the project.
 
-All of these sample applications have full walk through tutorials that explain the code in detail. Tutorials for each sample are available here:
+## Quick Links for the Impatient
 
-* https://dev.solace.com/samples/solace-samples-cloudfoundry-java/
+* Site: https://http-builder-ng.github.io/http-builder-ng/
+* User Guide: https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/
+* JavaDocs: https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/
+* Project: https://github.com/http-builder-ng/http-builder-ng
+* Twitter: [@HttpBuilderNG](https://twitter.com/HttpBuilderNG)
+* StackOverflow: [httpbuilder-ng](http://stackoverflow.com/questions/tagged/httpbuilder-ng)
 
-What follows is a brief summary for people that want to dive straight into the code.
+## Quick Overview
 
-## Common Setup
+Http Builder NG is a modern Groovy DSL for making http requests. It requires Java 8 and a modern Groovy. It is built against Groovy 2.4.x, but it doesn't make any assumptions about which version of Groovy you are using. The main goal of Http Builder NG is to allow you to make http requests in a natural and readable way. For example:
 
-The sample applications specify a dependency on a Solace Pubsub+ service instance named `solace-pubsub-sample-instance`. To create the required Solace PubSub+ service instance, do the following:
+```groovy
+//let's configure an http client to make calls to httpbin.org using the default http library
+def httpBin = HttpBuilder.configure {
+    request.uri = 'http://httpbin.org/'
+}
 
-	cf create-service solace-pubsub shared solace-pubsub-sample-instance
+//now let's GET /get endpoint at httpbin.
+//This will return a JSON formatted response with an origin property.
+def result = httpBin.get {
+    request.uri.path = '/get'
+}
+    
+println("Your ip address is: ${result.origin}")
 
-### Building
+//Finally lets post a standard http form to httpbin
+httpBin.post {
+    request.uri.path = '/post'
+    request.body = [ input1: 'the first input', input2: 'the second input' ]
+    request.contentType = 'application/x-www-form-urlencoded'
+}
 
-Just clone and build. For example:
+```
 
-1. clone this GitHub repository
-1. `./gradlew build`
+Hopefully that gives you a general idea of how Http Builder NG works. Http Builder NG is designed to be compatible with Groovy code annotated with [@TypeChecked](http://docs.groovy-lang.org/latest/html/gapi/groovy/transform/TypeChecked.html) and [@CompileStatic](http://docs.groovy-lang.org/latest/html/gapi/groovy/transform/CompileStatic.html). It also makes use of the [@DelegatesTo](http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/DelegatesTo.html) to provide better IDE support when writing code using Http Builder NG.
 
-### Deploying
+## Artifacts
 
-To deploy the individual applications to Cloud Foundry:
+Http Builder NG artifacts are available on [Bintray](https://bintray.com/http-builder-ng/dclark/http-builder-ng) and Maven Central, for Gradle you can add the following dependency to your `build.gradle` file `dependencies` closure:
 
-1. cd to the project directory (`java-app` or `spring-cloud`)
-1. `$ cf push`
+    compile 'io.github.http-builder-ng:http-builder-ng-CLIENT:1.0.4'
+    
+or, for Maven add the following to your `pom.xml` file:
 
-## Java Application
+    <dependency>
+      <groupId>io.github.http-builder-ng</groupId>
+      <artifactId>http-builder-ng-CLIENT</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+    
+where `CLIENT` is replaced with the client library name (`core`, `apache`, or `okhttp`).
 
-application name: `solace-sample-java-app`
+## Build Instructions
 
-This application uses the Java library from http://www.JSON.org/ to parse the `VCAP_SERVICES` environment variable to determine the connection details for Solace PubSub+. For more details and example usage, see the walk through tutorial here:
+HttpBuilder-NG is built using [gradle](https://gradle.org). To perform a complete build run the following:
 
-* [Online Tutorial](https://dev.solace.com/samples/solace-samples-cloudfoundry-java/java-app/)
+    `./gradlew clean build`
 
-## Java Application using Spring Cloud Connector
+Test reports are not automatically generated; if you need a generated test report (aggregated or per-project) use:
 
-application name: `solace-sample-spring-cloud`
+    `./gradlew clean build jacocoTestReport aggregateCoverage`
+    
+Note that the `aggregateCoverage` task may be dropped if the aggregated report is not desired. The reports will be generated in their respective `build/reports` directories, with the aggregated report being in the `build` directory of the project root.
 
-This application makes use of the Spring Cloud Connectors project to automatically parse the `VCAP_SERVICES` environment variable. Applications do *not* have to be a Spring Boot application to make use of Spring Cloud Connectors. This example makes use of Spring Boot for convenience in enabling the simple REST API. In any Java Applications, simply specify the following dependencies in your build:
+You can also generate the documentation using one of the following commands:
 
-	compile 'org.springframework.cloud:spring-cloud-spring-service-connector:1.2.3.RELEASE'
-	compile 'org.springframework.cloud:spring-cloud-cloudfoundry-connector:1.2.3.RELEASE'
-	compile 'com.solace.cloud.cloudfoundry:solace-spring-cloud-connector:2.1.+'
+* For the aggregated JavaDocs: `./gradlew aggregateJavaDoc`
+* For the project User Guide: `./gradlew asciidoctor`
 
-The `solace-spring-cloud-connector` is a Spring Cloud Connectors extension to parse the `VCAP_SERVICES` for the Solace PubSub+ service instance information. Check out the project page for more details:
+Overall project documentation may also be generated as the project web site, using the `site` task, discussed in the next section.
 
-* https://github.com/SolaceProducts/solace-spring-cloud/tree/master/solace-spring-cloud-connector
+## Documentation
 
-The easiest way for applications to access the SolaceServiceCredentials object is by Service Id (ex: "MyService) as follows:
+The documentation for the project consists of:
 
-	CloudFactory cloudFactory = new CloudFactory();
-	Cloud cloud = cloudFactory.getCloud();
-	SolaceServiceCredentials solaceServiceCredentials = (SolaceServiceCredentials) cloud.getServiceInfo("MyService");
+* [Web site](https://http-builder-ng.github.io/http-builder-ng/) - landing page and general introduction (`src/site` directory).
+* [User Guide](https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/) - getting started, examples and detailed usage information (`src/docs/asciidoc` directory).
+* [JavaDocs](https://http-builder-ng.github.io/http-builder-ng/docs/javadoc) - unified API documentation (throughout the codebase).
+* [Test](https://http-builder-ng.github.io/http-builder-ng/reports/allTests), [Coverage](https://http-builder-ng.github.io/http-builder-ng/reports/jacoco/aggregateCoverage/html) & Quality reports - misc build and quality reports
 
-Alternatively applications could search through the environment and discover matching services as follows:
+The documentation is provided by a unified documentation web site, which can be generated using:
 
-	SolaceServiceCredentials solaceServiceCredentials = null;
-	List<ServiceInfo> services = cloud.getServiceInfos();
+    ./gradlew site
+    
+This task uses the [com.stehno.gradle.site](http://cjstehno.github.io/gradle-site/) plugin to aggregate all the documentation sources and generate the project web site. Once it is built, you can verify the generated content by running a local server:
 
-	// Connect to the first Solace PubSub+ service that is found in the services list.
-	for (ServiceInfo service : services) {
-		if (service instanceof SolaceServiceCredentials) {
-			solaceServiceCredentials = (SolaceServiceCredentials)service;
-			break;
-		}
-	}
+    ./gradlew startPreview
+    
+which will start a preview server (see [com.stehno.gradle.webpreview](http://cjstehno.github.io/gradle-webpreview-plugin/)) on a random port copied to your clipboard. 
 
-For more details and example usage, see the walk through tutorial here:
+To stop the preview server run:
 
-* [Online Tutorial](https://dev.solace.com/samples/solace-samples-cloudfoundry-java/spring-cloud/)
+    ./gradlew stopPreview`
 
-## Java Application using Java CFEnv
+Once you are ready to publish your site, simply run the following task:
 
-application name: `solace-sample-spring-cloud-java-cfenv`
+    ./gradlew publishSite
+    
+This task will push the site contents into the `gh-pages` branch of the project, assuming you have permissions to push content into the repo.
 
-This application makes use of the Java CFEnv project to automatically parse the `VCAP_SERVICES` environment variable. In any Java Applications, simply specify the following dependencies in your build:
+## Artifact Release
+    
+When ready to release a new version of the project, perform the following steps starting in the `development` branch:
 
-    compile 'com.solace.cloud.cloudfoundry:solace-java-cfenv'
+1. Ensure that the project version (in `build.gradle`) has been updated to the desired version.
+1. Run `./gradlew updateVersion -Pfrom=OLD_VERSION` to update the documented version.
+1. Create a Pull Request from `development` to `master` and accept it or have it reviewed.
 
-The `solace-java-cfenv` is the successor to `solace-spring-cloud-connector` due to the deprecation of Spring Cloud Connectors. It is a Java CFEnv extension to parse the `VCAP_SERVICES` for the Solace PubSub+ service instance information. Check out the project page for more details:
+Once the pull request has been merged into `master`, checkout the `master` branch and:
 
-* https://github.com/SolaceProducts/solace-spring-boot/tree/master/solace-java-cfenv
+1. Run `./gradlew release` which will check the documented project version against the project version, publish the artifact and the documentation web site. 
+   * You will need to provide (or have configured in your `HOME/.gradle/gradle.properties` file):
+     * `user` - the Bintray username
+     * `key` - the Bintray key/password
+     * `sonotypeUser` - the Sonotype username (from API key)
+     * `sonotypePass` - the Sonotype password (from API key)
+   * This step may take some time (on the order of a minute or two depending on server response times).
+2. Manually confirm the publication of the new artifact on the Bintray web site (or the publication will expire) - this step may no longer be needed, but verify anyway.
+3. Run `./gradlew verifyRelease`  to ensure that the artifacts and site have been published (optional but recommended).
+4. A Git tag should be created for the released version.
 
-To access the SolaceServiceCredentials object, applications must retrieve it in a manner similar to the following:
+The `development` branch may now be used for the next round of development work.
 
-	SolaceServiceCredentials solaceServiceCredentials = null;
-	List<SolaceServiceCredentials> solaceServiceCredentialsList = SolaceServiceCredentialsFactory.getAllFromCloudFoundry();
+> NOTE: Since the artifacts must be confirmed and the site may need some installation time, the `verifyRelease` task cannot be combined with the `release` task.
 
-	// Connect to the first Solace PubSub+ service that is found in the services list.
-	if (solaceServiceCredentialsList.size() > 0) {
-	    solaceServiceCredentials = solaceServiceCredentialsList.get(0);
-	}
+## Version Updates
 
-## Secure Session
+When updating the version of the project, the documented version should also be updated using the `updateVersion` task. Modify the version in the project `build.gradle` file and make note of the existing version then run:
 
-application name: `solace-sample-secure-session`
+    ./gradlew updateVersion -Pfrom=OLD_VERSION
+    
+where `OLD_VERSION` is the pre-existing version of the project. This will update the current version mentioned in the documentation (e.g. README, User Guide and site).
 
-This application is based on the [Solace Java CFEnv](https://github.com/SolaceProducts/solace-spring-boot/tree/master/solace-java-cfenv) described above, but shows how to use
-Transport Level Security (TLS) between the Java application and the Solace PubSub+ Service Instance.
+## History
 
-* [Online Tutorial](https://dev.solace.com/samples/solace-samples-cloudfoundry-java/secure-session/)
+Http Builder NG was forked from the HTTPBuilder project originally developed by Thomas Nichols. It was later passed on to Jason Gritman who maintained it for several years.
 
-## LDAP
+The original intent of Http Builder NG was to fix a few bugs and add a slight enhancement to the original HTTPBuilder project. The slight enhancement was to make HTTPBuilder conform to more modern Groovy DSL designs. However, it was not possible to update the original code to have a more modern typesafe DSL while preserving backwards compatibility. I decided to just make a clean break and give the project a new name to make it clear that Http Builder NG is basically a complete re-write and re-architecture.
 
-This is not a standalone application, but instead a modification to the existing sample apps.
+# License
 
-If application access is enabled by the cloud operator, bindings will not contain application access credentials and the credentials will instead have to be provided to the application externally.
+```
+Copyright 2017 HttpBuilder-Project
 
-This manifests as the service instance owner having to manually configure LDAP authorization groups for application access.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-* [Online Tutorial](https://dev.solace.com/samples/solace-samples-cloudfoundry-java/ldap/)
+    http://www.apache.org/licenses/LICENSE-2.0
 
-## Try out the Applications
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
 
-The sample applications have a simple REST interface that allows you to subscribe, send and receive Solace messages. You can try the applications out using command like the following.
+# Original Project
 
-Determine the URL of the sample application and export it for use in the `curl` commands. Adjust the app name as appropriate to match the sample you're using:
-
-	export APP_NAME=solace-sample-java-app
-	export APP_URL=`cf apps | grep $APP_NAME | grep started | awk '{ print $6}'`
-	echo "The application URL is: ${APP_URL}"
-
-Subscribe to topic "test"
-
-	curl -X POST -H "Content-Type: application/json;charset=UTF-8" -d '{"subscription": "test"}' http://$APP_URL/subscription
-
-Send message with topic "test"
-
-	curl -X POST -H "Content-Type: application/json;charset=UTF-8" -d '{"topic": "test", "body": "TEST_MESSAGE"}' http://$APP_URL/message
-
-The message is received asynchronously, check for the last message.
-
-	curl -X GET http://$APP_URL/message
-
-Unsubscribe the application from topic "test"
-
-    curl -X DELETE http://$APP_URL/subscription/test
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Authors
-
-See the list of [contributors](https://github.com/SolaceSamples/solace-samples-cloudfoundry-java/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the Apache License, Version 2.0. - See the [LICENSE](LICENSE) file for details.
-
-## Resources
-
-For more information try these resources:
-
-
-- [Tutorials](https://tutorials.solace.dev/)
-- The Solace Developer Portal website at: http://dev.solace.com
-- Get a better understanding of [Solace technology](http://dev.solace.com/tech/).
-- Check out the [Solace blog](http://dev.solace.com/blog/) for other interesting discussions around Solace technology
-- Ask the [Solace community.](http://dev.solace.com/community/)
+[jgritman/httpbuilder](https://github.com/jgritman/httpbuilder)
