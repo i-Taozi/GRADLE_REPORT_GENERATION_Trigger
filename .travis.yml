@@ -1,45 +1,62 @@
-language: android
-jdk:
-- oraclejdk8
-android:
-  components:
-  - platform-tools
-  - tools
-  - build-tools-24.0.1
-  - android-24
-  - extra-google-google_play_services
-  - extra-android-m2repository
-  - extra-google-m2repository
-  licenses:
-  - android-sdk-license-.+
-  - google-gdk-license-.+
-before_script:
-  - chmod +x gradlew
-script:
-  - "./gradlew build -PversionCode=$TRAVIS_BUILD_NUMBER"
-before_deploy:
-  - git config --global user.email "builds@travis-ci.com"
-  - git config --global user.name "Travis CI"
-  - export GIT_TAG=$TRAVIS_BRANCH-rev$TRAVIS_BUILD_NUMBER
-  - git tag $GIT_TAG -a -m "Pokemap development build $TRAVIS_BUILD_NUMBER"
-  - git push -q https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG --tags
-  - ls -R
-deploy:
-  skip_cleanup: true
-  provider: releases
-  prerelease: true
-  api_key:
-    secure: OQHzpHLLrxjZZ/vgSmi8sv8xYTW4ddHENSi37IEQMZC0uQig0sdUDgunadS9rMq7/Wf3lvJsYIItBHLLteVcUJC1opo7RqDEBBho3xnSPPW89f3c2j9LC43FFOgTmgr9obf9nC3fdZb/icpK+eK+jlrQ7FO3S+OkbeK+UuduqpzOn79pE1TN8IIQ6fsdJyGektEBsuHJ/bEYNnc++KAgkfVHqS8JWMoTtwo61H2Bn/rtgrQBVEiijpuzZ6W3/klFP9FjETlGcXGiFgCT0jR+QrNC4RtveEit7MyUc8pEyBxwt+5GW6dzA+pgX1jEqHIdlY28Zc04743fP93iXhGSHxXRw9+F9JcY3qLToLGPDemnLY2PbAQN+/07SrO9OAczDjCSEfBoObaVbwHal6/GSimcrA+K3lWpnbDTrer5IZnEq9UPEYEtf5yF0PpCkQlFkfxzJSyla2+ER3uSb/azBvWUz8R93dDA101HAyurqLSa3QwfVGw+M+YN5C8C/jLAgfZRfEKGrtogX8GHG3ioXKUpbjKfX+vwXemvK//6M1zdRUhpxt69a1dTR9hx3mpt8eYmfDCioCP40ZWFrfb8nmacsCqUAn2stV1i2r2yrn9JsUnaM9qVco8ztrXo9SN7cdIFFx8Je5ZKUp6Vxyg0vQjPKNrauueWngRcjdzpcD4=
-  file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
-  on:
-    tags: false
-    repo: omkarmoghe/Pokemap
-    branch: dev
+# Use container-based Travis, with the Trusty image (Ubuntu 14.04).
+# See https://docs.travis-ci.com/user/reference/overview/ and https://docs.travis-ci.com/user/reference/trusty/
+#
+# Before trying to upgrade this, check the 'android' language support at https://docs.travis-ci.com/user/languages/android/
+# At the time of writing, this says:
+# > Android builds are only supported on our Trusty image at this time hence you’ll need to explicitly
+#   specify dist: trusty in your .travis.yml file.
+sudo: false
+dist: trusty
+
 branches:
-  except:
-  - "/^*-rev[0-9]/"
-notifications:
-  email: false
+  only:
+    - master
+
+# Get the full commit history (required to derive our version code, see the root build.gradle)
+git:
+  depth: false
+
+language: android
+addons:
+  apt:
+    packages:
+      - openjdk-9-jdk
+      - openjdk-11-jdk
 env:
   global:
-    secure: Q8ujMb2AcMsN4x6Z92K5U2zSkhDI9C2yRzfN/8CHZBqt4Wr0bNMeMWA8LuwSzGAqrJFkwjI76M7WGqCcQmM6sCakAS3zD/GwK6vJ96fN537lGF8zhJv9+qk1hYCrK/LSBwY2m+RJGwLRh0da5V5aD23r/oiNdH9Bo8fcWsN/SpGD4CHI2Q3F9nIvMBB3FMnrZRUC3hEzNFdTpdoYGxUiSOFs3uAKYHKJWc8tJ1AQfd58f8Uf2TQ5LBlBk8I2kUieU8RaRweuFwVBPwLa0rJzuIlmhBUJrZxIC/evxRnBYjEITwbYCixymj8JicHT9JgPkvRJJkhbjX+H7AX+xjjXKQgqDgSye5dTDFqfkjgdgnpAoCbXhzl8JXKPB/cDsiMuJGE2Az9asZN7EgvPDz7/NpqKc3nhzLkcNy8EWo0K28HPqLw2IZdST9ivrh3uUG+ry2GkXv8j4+4YP9VYJ3hz3OtLZXGXXnfqDr+ruOIKZez36gUH4HmrgssZCUa8O1kZq+geiMzqBq2NfR+QZ5NK+2zpNtT5jANma4hrpEJaeHC5m2l62HKlzMGTCmmitHkmOk2zuI/2xUW63K7bIqY5ioHA5H07RoDB79O6sHJuVMsZL/5vq+lMEzBxEvsW+KA8XtQZuk1Xktv4Fkgf41UGymeT+hqUbmxPCuKbPlIg2VA=
+    # Remember to keep these four values in sync with values in the root build.gradle file
+    - compileSdkVersion=30
+    - minSdkVersion=23
+    - targetSdkVersion=29
+    - toolsVersion=30.0.3
+    - JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+    - JAVA9_HOME=/usr/lib/jvm/java-9-openjdk-amd64
+    - JAVA11_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    # For the decryption of secrets needed to sign and publish our artifacts
+    - secure: "LipL0wPv0uQrKitaeGxCpoQsx5sl/Pg/DtQv4S7Bi52DxfArgvD2hPB0TWgkgYGJPfENHLEyqg+H+/v2nON3IXY+cnsd+TW+P1T03/52D56ieSKGVtVtSYUOZUgoyxIIvRZWFh/UNg+AmZIjOCTJDLitBTUxD8kWux8NjhIqZow="
+android:
+  components:
+    # Android tools - it's deliberate that `tools` is in there twice, see https://docs.travis-ci.com/user/languages/android/#Installing-a-newer-SDK-Platform-Tools-revision
+    - tools  # to download the latest listing of what's available to download
+    - platform-tools
+    - tools  # to install up-to-date Android SDK tools
+    - build-tools-${toolsVersion}
+
+    # SDK versions
+    - android-${compileSdkVersion}
+
+before_install:
+  - ./ciLicense.sh
+  - sudo pip install requests
+  - touch $HOME/.android/repositories.cfg
+  - jdk_switcher use openjdk8
+  - yes | sdkmanager "platforms;android-30"
+  - yes | sdkmanager "build-tools;30.0.3"
+
+install:
+  - ls -l /usr/lib/jvm/
+  - ./checkPoiTypeIcons.sh
+  - JAVA_HOME=${JAVA9_HOME} ./gradlew build -Dorg.gradle.java.home=${JAVA9_HOME} -x lint
+
+script:
+  - ./ciPublish.sh
